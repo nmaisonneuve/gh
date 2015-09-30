@@ -9,4 +9,4 @@
 phantomjs
 
 # usage
-$> phantomjs scrape_company_linkedin.js company_name.csv (as input) company_linkedin.csv  (as ouput)
+$> phantomjs scrape_linkedin_company.js company_name.csv (as input) company_linkedin.csv  (as ouput)
