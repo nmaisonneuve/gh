@@ -50,7 +50,7 @@ steps.push(function() {
 steps.push(function() {
     //Enter Credentials
     page.evaluate(function() {
-        document.getElementById("session_key-login").value = "username";
+        document.getElementById("session_key-login").value = "login";
         document.getElementById("session_password-login").value = "mdp";
         console.log("user/pass setted ... ");
     });
@@ -80,6 +80,7 @@ for (var i = 0; i < companies.length; i++) {
   // open the search for a given company name
   steps.push(function() {
       k++;
+      console.log("searching for company "+companies[k])
       var url = "https://www.linkedin.com/vsearch/c?keywords="+ companies[k] +"&trk=vsrp_companies_sel&openFacets=N,CCR,JO&f_CCR=fr%3A0&orig=FCTD";
       page.open(url);    
   });
@@ -87,7 +88,7 @@ for (var i = 0; i < companies.length; i++) {
   // extract the first result
   steps.push(function(){
      var company = companies[k];
-    page.evaluate(function(company, data) {         
+    data  = page.evaluate(function(company, data) {         
       var results = Array.prototype.slice.call(document.getElementById("results").getElementsByTagName("h3"));
       ref = results[0].getElementsByTagName('a')[0].href;
       title = results[0].getElementsByTagName('a')[0].innerHTML;      
@@ -96,9 +97,12 @@ for (var i = 0; i < companies.length; i++) {
       //TODO 
       // check if the name is quite similar 
       // (do we really care if what we do is raw?)
-
-      data.push([company, title, ref]);  // save the company name , title from linkedin, url 
+      console.log("saving first result for company "+company+" "+ref);      
+      data.push([company, title, ref]);
+      return data;  // save the company name , title from linkedin, url 
     },company, data);
+
+    console.log(data);
   });
 }
 
@@ -111,12 +115,17 @@ interval = setInterval(function() {
         testindex++;
     }
     if (typeof steps[testindex] != "function") {
-        console.log("test complete!");
+        console.log("test complete! ");
+
+        content = data.join("\n");
+        console.log(content);
+        fs.write(output_filename, content, 'w');
+
         phantom.exit();
+                // save results
+        
     }
 }, 100);
 
 
-// save results
-content = data.join("\n")
-fs.write(output_filename, content, 'w');
+
