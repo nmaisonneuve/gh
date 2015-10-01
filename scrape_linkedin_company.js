@@ -50,8 +50,8 @@ steps.push(function() {
 steps.push(function() {
     //Enter Credentials
     page.evaluate(function() {
-        document.getElementById("session_key-login").value = "n.maisonneuve@gmail.com";
-        document.getElementById("session_password-login").value = "astiko";
+        document.getElementById("session_key-login").value = "username";
+        document.getElementById("session_password-login").value = "mdp";
         console.log("user/pass setted ... ");
     });
 });
